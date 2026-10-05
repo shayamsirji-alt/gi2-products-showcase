@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A Simple To-Do List Manager Fo</title>
+<meta name="description" content="A simple to-do list manager for my family">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#059669">
+</head>
+<body class="min-h-screen bg-slate-50 text-slate-900 antialiased">
+
+<header class="bg-white shadow-sm sticky top-0 z-10">
+  <div class="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
+    <h1 class="text-xl font-bold text-emerald-600">A Simple To-Do List Manager Fo</h1>
+    <button onclick="addItem()" class="bg-emerald-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-emerald-700">+ Add</button>
+  </div>
+</header>
+
+<main class="max-w-5xl mx-auto px-4 py-8">
+  <input id="search" oninput="render()" placeholder="Search..." class="w-full border rounded-lg px-4 py-2 mb-6">
+  <div id="list" class="space-y-3"></div>
+</main>
+
+<script>
+let items = JSON.parse(localStorage.getItem("items") || "[]");
+function save() { localStorage.setItem("items", JSON.stringify(items)); }
+function addItem() {
+  const v = prompt("Enter item:");
+  if (!v) return;
+  items.push({ id: Date.now(), text: v, ts: new Date().toISOString() });
+  save(); render();
+}
+function delItem(id) {
+  items = items.filter(i => i.id !== id);
+  save(); render();
+}
+function render() {
+  const q = document.getElementById("search").value.toLowerCase();
+  const list = document.getElementById("list");
+  const filtered = items.filter(i => i.text.toLowerCase().includes(q));
+  list.innerHTML = filtered.length ? filtered.map(i => `
+    <div class="bg-white p-4 rounded-lg shadow-sm flex items-center justify-between">
+      <div>
+        <p class="font-medium">${i.text}</p>
+        <p class="text-xs text-slate-400">${new Date(i.ts).toLocaleString()}</p>
+      </div>
+      <button onclick="delItem(${i.id})" class="text-red-500 hover:text-red-700">✕</button>
+    </div>`).join("") : '<p class="text-center text-slate-400 py-8">No items yet. Click + Add.</p>';
+}
+render();
+</script>
+
+<script>
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("sw.js").catch(()=>{});
+}
+</script>
+</body>
+</html>

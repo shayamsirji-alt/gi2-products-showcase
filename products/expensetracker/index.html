@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ExpenseTracker</title>
+<meta name="description" content="Track your expenses and revenues with ease.">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#f59e0b">
+</head>
+<body class="min-h-screen bg-slate-50 text-slate-900 antialiased">
+
+<header class="bg-white shadow-sm">
+  <div class="max-w-4xl mx-auto px-4 py-4">
+    <h1 class="text-xl font-bold text-amber-600">ExpenseTracker</h1>
+    <p class="text-sm text-slate-500">Track your expenses and revenues with ease.</p>
+  </div>
+</header>
+
+<main class="max-w-4xl mx-auto px-4 py-8">
+  <div class="bg-white p-6 rounded-xl shadow-sm mb-6">
+    <h3 class="font-semibold mb-4">Add Entry</h3>
+    <div class="flex gap-2">
+      <input id="label" placeholder="Label" class="flex-1 border rounded-lg px-3 py-2">
+      <input id="value" type="number" placeholder="Value" class="w-32 border rounded-lg px-3 py-2">
+      <button onclick="addEntry()" class="bg-amber-600 text-white px-4 py-2 rounded-lg">Add</button>
+    </div>
+  </div>
+  <div class="bg-white p-6 rounded-xl shadow-sm">
+    <canvas id="chart"></canvas>
+  </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+let data = JSON.parse(localStorage.getItem("tracker") || "[]");
+let chart;
+function addEntry() {
+  const l = document.getElementById("label").value;
+  const v = parseFloat(document.getElementById("value").value);
+  if (!l || isNaN(v)) return;
+  data.push({ l, v, ts: new Date().toISOString() });
+  localStorage.setItem("tracker", JSON.stringify(data));
+  document.getElementById("label").value = "";
+  document.getElementById("value").value = "";
+  render();
+}
+function render() {
+  const ctx = document.getElementById("chart");
+  if (chart) chart.destroy();
+  chart = new Chart(ctx, {
+    type: "bar",
+    data: {
+      labels: data.map(d => d.l),
+      datasets: [{ label: "Value", data: data.map(d => d.v), backgroundColor: "#f59e0b" }]
+    },
+    options: { responsive: true, plugins: { legend: { display: false } } }
+  });
+}
+render();
+</script>
+
+<script>
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("sw.js").catch(()=>{});
+}
+</script>
+</body>
+</html>

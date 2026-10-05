@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GI2-OS Products Showcase</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    color: #e2e8f0; min-height: 100vh; padding: 40px 20px;
+  }
+  .container { max-width: 1200px; margin: 0 auto; }
+  header { text-align: center; margin-bottom: 50px; }
+  h1 { font-size: clamp(24px, 5vw, 42px); color: #38bdf8; margin-bottom: 12px; }
+  .subtitle { color: #94a3b8; font-size: clamp(14px, 2.5vw, 18px); }
+  .badge { display: inline-block; background: #22c55e; color: #052e16; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; margin-top: 12px; }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 20px;
+  }
+  .card {
+    display: block;
+    background: rgba(30, 41, 59, 0.8);
+    border: 1px solid #334155;
+    border-radius: 16px; padding: 24px;
+    text-decoration: none; color: inherit;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+  }
+  .card:hover {
+    transform: translateY(-4px);
+    border-color: #38bdf8;
+    box-shadow: 0 12px 32px rgba(56, 189, 248, 0.2);
+  }
+  .icon { font-size: 40px; margin-bottom: 12px; }
+  .card h3 { font-size: 18px; margin-bottom: 8px; color: #f1f5f9; }
+  .card p { color: #94a3b8; font-size: 13px; margin-bottom: 16px; }
+  .btn {
+    display: inline-block;
+    background: #38bdf8; color: #0c4a6e;
+    padding: 8px 16px; border-radius: 8px;
+    font-size: 13px; font-weight: 600;
+  }
+  footer {
+    text-align: center; margin-top: 60px;
+    color: #64748b; font-size: 13px; line-height: 1.8;
+  }
+  footer a { color: #38bdf8; text-decoration: none; }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1>🏛️ GI2-OS Products Showcase</h1>
+    <p class="subtitle">Autonomous AI Ecosystem · Idea to Product A-Z</p>
+    <span class="badge">✅ 100% FREE · Self-Healing · 24/7 Cloud</span>
+  </header>
+
+  <div class="grid">
+    <a class="card" href="./products/a-customer-contact-manager-for/index.html" target="_blank">
+      <div class="icon">👥</div>
+      <h3>A Customer Contact Manager For</h3>
+      <p>12 files · 9.1 KB</p>
+      <span class="btn">Open →</span>
+    </a>    <a class="card" href="./products/a-landing-page-for-my-yoga-cla/index.html" target="_blank">
+      <div class="icon">🎨</div>
+      <h3>A Landing Page For My Yoga Cla</h3>
+      <p>4 files · 3.6 KB</p>
+      <span class="btn">Open →</span>
+    </a>    <a class="card" href="./products/a-simple-to-do-list-manager-fo/index.html" target="_blank">
+      <div class="icon">👥</div>
+      <h3>A Simple To Do List Manager Fo</h3>
+      <p>4 files · 3 KB</p>
+      <span class="btn">Open →</span>
+    </a>    <a class="card" href="./products/expensetracker/index.html" target="_blank">
+      <div class="icon">💰</div>
+      <h3>Expensetracker</h3>
+      <p>4 files · 3 KB</p>
+      <span class="btn">Open →</span>
+    </a>    <a class="card" href="./products/taskmaster/index.html" target="_blank">
+      <div class="icon">✅</div>
+      <h3>Taskmaster</h3>
+      <p>4 files · 2.8 KB</p>
+      <span class="btn">Open →</span>
+    </a>
+  </div>
+
+  <footer>
+    <p>Built autonomously by <strong>Shayam Sirji's GI2-OS</strong></p>
+    <p>Powered by Ollama + Langflow + n8n · Hosted on GitHub Pages (free)</p>
+    <p><a href="https://github.com/shayamsirji-alt/GI2-Smart-AI-Ecosystem">GitHub</a></p>
+  </footer>
+</div>
+</body>
+</html>

@@ -1,0 +1,9 @@
+{
+  "name": "ExpenseTracker",
+  "short_name": "ET",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f1f5f9",
+  "theme_color": "#f59e0b",
+  "icons": []
+}
