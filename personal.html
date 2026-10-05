@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GI2-OS Command Center</title>
+<meta name="robots" content="noindex">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:-apple-system,Segoe UI,Roboto,sans-serif;background:#0f172a;color:#e2e8f0;padding:20px;line-height:1.6}
+  .box{max-width:900px;margin:0 auto}
+  h1{color:#38bdf8;font-size:26px;margin-bottom:4px}
+  .sub{color:#94a3b8;font-size:13px;margin-bottom:20px}
+  h2{color:#38bdf8;font-size:17px;margin:20px 0 10px;border-bottom:1px solid #1e293b;padding-bottom:6px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px}
+  .card{background:#1e293b;padding:12px;border-radius:8px}
+  .card .lbl{color:#94a3b8;font-size:11px;text-transform:uppercase;margin-bottom:4px}
+  .card .val{font-size:15px;font-weight:600;color:#e2e8f0}
+  .up{color:#22c55e}.down{color:#ef4444}
+  a{color:#38bdf8;text-decoration:none;display:inline-block;padding:8px 12px;background:#1e293b;border-radius:6px;margin:4px 4px 4px 0;font-size:13px}
+  a:hover{background:#334155}
+  input,textarea{width:100%;padding:10px;background:#1e293b;border:1px solid #334155;border-radius:6px;color:#e2e8f0;font-size:14px;margin:4px 0}
+  button{padding:10px 16px;background:#38bdf8;color:#0c4a6e;border:none;border-radius:6px;font-weight:600;cursor:pointer;font-size:13px}
+  ul{list-style:none;padding:0}
+  li{background:#1e293b;padding:10px 12px;border-radius:6px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;font-size:13px}
+  li button{background:#ef4444;color:#fff;padding:4px 10px;font-size:11px}
+  .done{text-decoration:line-through;opacity:.6}
+  .foot{text-align:center;color:#64748b;font-size:11px;margin-top:30px;padding-top:15px;border-top:1px solid #1e293b}
+</style>
+</head>
+<body>
+<div class="box">
+  <h1>GI2-OS Command Center</h1>
+  <div class="sub">आज का status — <span id="now"></span></div>
+
+  <h2>Quick Links</h2>
+  <a href="http://127.0.0.1:3005" target="_blank">Chat UI</a>
+  <a href="http://127.0.0.1:3000" target="_blank">MiroFish</a>
+  <a href="http://127.0.0.1:8085" target="_blank">Stirling PDF</a>
+  <a href="http://127.0.0.1:3002" target="_blank">Langflow</a>
+  <a href="http://127.0.0.1:5678" target="_blank">n8n</a>
+  <a href="http://127.0.0.1:3080" target="_blank">DeepSeek</a>
+  <a href="index.html" target="_blank">Showcase</a>
+
+  <h2>My Daily Tasks</h2>
+  <input id="taskInput" placeholder="क्या करना है आज? (Enter दबाएं)">
+  <ul id="taskList"></ul>
+
+  <h2>Money Tracker (Revenue)</h2>
+  <div class="grid">
+    <div class="card"><div class="lbl">Total Sale</div><div class="val" id="totalSale">₹0</div></div>
+    <div class="card"><div class="lbl">Visitors (today)</div><div class="val" id="visitors">0</div></div>
+    <div class="card"><div class="lbl">Products Live</div><div class="val">5</div></div>
+    <div class="card"><div class="lbl">Days Active</div><div class="val" id="days">1</div></div>
+  </div>
+  <input id="saleInput" placeholder="Add sale (₹ amount)">
+  <button onclick="addSale()">Add Sale</button>
+
+  <h2>Learning Log</h2>
+  <input id="learnInput" placeholder="आज क्या सीखा? (Enter)">
+  <ul id="learnList"></ul>
+
+  <div class="foot">
+    GI2-OS Ecosystem • Local AI • 100% Free<br>
+    Data saves locally (browser) — no server, no tracking
+  </div>
+</div>
+
+<script>
+document.getElementById('now').textContent = new Date().toLocaleString();
+const DAY_START = localStorage.getItem('dayStart') || new Date().toDateString();
+if(!localStorage.getItem('dayStart')) localStorage.setItem('dayStart', DAY_START);
+const start = new Date(DAY_START);
+const days = Math.max(1, Math.ceil((new Date() - start) / 86400000));
+document.getElementById('days').textContent = days;
+
+const tasks = JSON.parse(localStorage.getItem('tasks')||'[]');
+const learns = JSON.parse(localStorage.getItem('learns')||'[]');
+const totalSale = parseInt(localStorage.getItem('totalSale')||'0');
+const visitorCount = parseInt(localStorage.getItem('visitorCount')||'0');
+document.getElementById('totalSale').textContent = '₹'+totalSale;
+document.getElementById('visitors').textContent = visitorCount;
+
+function renderTasks(){
+  const ul = document.getElementById('taskList');
+  ul.innerHTML = '';
+  tasks.forEach((t,i)=>{
+    const li = document.createElement('li');
+    li.innerHTML = `<span class="${t.done?'done':''}" onclick="toggleTask(${i})" style="cursor:pointer;flex:1">${t.text}</span><button onclick="delTask(${i})">X</button>`;
+    ul.appendChild(li);
+  });
+  localStorage.setItem('tasks', JSON.stringify(tasks));
+}
+function renderLearns(){
+  const ul = document.getElementById('learnList');
+  ul.innerHTML = '';
+  learns.forEach((t,i)=>{
+    const li = document.createElement('li');
+    li.innerHTML = `<span>${t}</span><button onclick="delLearn(${i})">X</button>`;
+    ul.appendChild(li);
+  });
+  localStorage.setItem('learns', JSON.stringify(learns));
+}
+function toggleTask(i){ tasks[i].done = !tasks[i].done; renderTasks(); }
+function delTask(i){ tasks.splice(i,1); renderTasks(); }
+function delLearn(i){ learns.splice(i,1); renderLearns(); }
+function addSale(){
+  const v = prompt('Sale amount in ₹?');
+  if(v){
+    const amt = parseInt(v);
+    const t = parseInt(localStorage.getItem('totalSale')||'0') + amt;
+    localStorage.setItem('totalSale', t);
+    document.getElementById('totalSale').textContent = '₹'+t;
+  }
+}
+
+document.getElementById('taskInput').addEventListener('keydown',e=>{
+  if(e.key==='Enter' && e.target.value.trim()){
+    tasks.push({text:e.target.value.trim(),done:false});
+    e.target.value='';
+    renderTasks();
+  }
+});
+document.getElementById('learnInput').addEventListener('keydown',e=>{
+  if(e.key==='Enter' && e.target.value.trim()){
+    learns.push(e.target.value.trim());
+    e.target.value='';
+    renderLearns();
+  }
+});
+
+// Count this visit (once per day)
+const today = new Date().toDateString();
+const lastVisit = localStorage.getItem('lastVisit');
+if(lastVisit !== today){
+  localStorage.setItem('lastVisit', today);
+  const n = parseInt(localStorage.getItem('visitorCount')||'0') + 1;
+  localStorage.setItem('visitorCount', n);
+  document.getElementById('visitors').textContent = n;
+}
+
+renderTasks();
+renderLearns();
+</script>
+</body>
+</html>
