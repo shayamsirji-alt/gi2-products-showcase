@@ -1,0 +1,17 @@
+User-agent: *
+Allow: /
+
+# AI Search Engines welcome
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+Sitemap: https://shayamsirji-alt.github.io/gi2-products-showcase/sitemap.xml
